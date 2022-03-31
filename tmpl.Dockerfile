@@ -1,0 +1,4 @@
+FROM alpine
+
+# Test
+ENV VERSION=${VERSION}

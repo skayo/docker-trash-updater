@@ -1,0 +1,11 @@
+{
+	"extends": [
+		"config:base",
+		"helpers:pinGitHubActionDigests",
+		"docker:enableMajor",
+		"docker:pinDigests",
+		":reviewer(skayo)",
+		":assignee(skayo)",
+		":label(dependencies)"
+	]
+}

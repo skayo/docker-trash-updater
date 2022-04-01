@@ -32,8 +32,8 @@ jobs:
         uses: docker/login-action@dd4fa0671be5250ee6f50aedf4cb05514abda2c7 # tag=v1
         with:
           registry: ghcr.io
-          username: skayobot
-          password: ${{ secrets.SKAYOBOT_GITHUB_TOKEN }}
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Extract Metadata for Docker 📄
         id: meta

@@ -2,24 +2,26 @@
 # Auto-generated from tmpl.Dockerfile
 #
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine@sha256:4882761845f96b050a4d77e1b3d01f11269c8b1499f75889b63eafa2dbb54064 AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:6.0-alpine@sha256:4882761845f96b050a4d77e1b3d01f11269c8b1499f75889b63eafa2dbb54064 AS build
 WORKDIR /build
 
-# Build binary
+# Get source code
 RUN set -ex; \
-	git clone -b "${VERSION}" https://github.com/rcdailey/trash-updater.git ./; \
-	apkArch="$(apk --print-arch)"; \
-	case "$apkArch" in \
-		armv7) runtime='alpine-arm' ;; \
-		aarch64) runtime='alpine-arm64' ;; \
-		x86_64) runtime='alpine-x64' ;; \
+	git clone -b "${VERSION}" https://github.com/rcdailey/trash-updater.git ./
+
+# Build binary
+ARG TARGETPLATFORM
+RUN case "$TARGETPLATFORM" in \
+		"linux/arm/v7") runtime='alpine-arm' ;; \
+		"linux/arm64") runtime='alpine-arm64' ;; \
+		"linux/amd64") runtime='alpine-x64' ;; \
 		*) echo >&2 "error: unsupported architecture: $apkArch"; exit 1 ;; \
 	esac; \
 	dotnet publish src/Trash \
 		--output ./output  \
 		--runtime $runtime \
 		--self-contained true \
-		--configuration Release;
+		--configuration Release
 
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine@sha256:91db5cb22c9114ae9b7f96413931b38eed665e5c5963a7670c1323c64a201ce9

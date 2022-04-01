@@ -2,7 +2,7 @@
 # Auto-generated from tmpl.Dockerfile
 #
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine@sha256:3a3ad298e9502e8fe309fd2d222f83039ca587c6381060fdee840beb088fb533 AS build
 WORKDIR /build
 
 # Build binary

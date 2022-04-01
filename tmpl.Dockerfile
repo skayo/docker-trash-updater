@@ -24,6 +24,21 @@ RUN set -ex; \
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine
 
+# Runtime configuration options
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+
 # Copy built binary
 COPY --from=build /build/output/trash /usr/local/bin/trash
 
+# Install required packages
+RUN apk add --no-cache tini
+
+# Setup cron jobs
+ARG SCHEDULE="@daily"
+RUN echo "$SCHEDULE /usr/local/bin/trash sonarr --config /config/trash.yml" > /var/spool/cron/crontabs/root; \
+    echo "$SCHEDULE /usr/local/bin/trash radarr --config /config/trash.yml" >> /var/spool/cron/crontabs/root;
+
+# Start crontab daemon using tini
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["/usr/sbin/crond", "-f"]

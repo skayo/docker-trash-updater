@@ -9,7 +9,7 @@ WORKDIR /build
 
 # Get source code
 RUN set -ex; \
-	git clone -b "v1.8.2" https://github.com/rcdailey/trash-updater.git ./
+	git clone -b "v1.8.2" https://github.com/rcdailey/trash-updater.git /build
 
 # Build binary
 ARG TARGETPLATFORM
@@ -17,7 +17,7 @@ RUN case "$TARGETPLATFORM" in \
 		"linux/arm/v7") runtime='alpine-arm' ;; \
 		"linux/arm64") runtime='alpine-arm64' ;; \
 		"linux/amd64") runtime='alpine-x64' ;; \
-		*) echo >&2 "ERROR: Unsupported Platform '$TARGETPLATFORM'"; exit 1 ;; \
+		*) echo >&2 "ERROR: Unsupported target platform: $TARGETPLATFORM"; exit 1 ;; \
 	esac; \
 	dotnet publish src/Trash \
 		--output ./output  \

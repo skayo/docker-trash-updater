@@ -4,7 +4,7 @@ WORKDIR /build
 
 # Get source code
 RUN set -ex; \
-	git clone -b "${VERSION}" https://github.com/rcdailey/trash-updater.git ./
+	git clone -b "${VERSION}" https://github.com/rcdailey/trash-updater.git /build
 
 # Build binary
 ARG TARGETPLATFORM

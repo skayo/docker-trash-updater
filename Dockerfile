@@ -32,17 +32,19 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine@sha256:91db5cb22c9114ae9b7
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 ENV DOTNET_RUNNING_IN_CONTAINER=true
 
-# Copy built binary
+# Copy built binary from build step
 COPY --from=build /build/output/trash /usr/local/bin/trash
 
-# Install required packages
-RUN apk add --no-cache tini
+# Define volume (contains config file)
+VOLUME /config
 
-# Setup cron jobs
+# Setup cron jobs (we'll overwrite the existing crontab file)
 ARG SCHEDULE="@daily"
-RUN echo "$SCHEDULE /usr/local/bin/trash sonarr --config /config/trash.yml" > /var/spool/cron/crontabs/root; \
-    echo "$SCHEDULE /usr/local/bin/trash radarr --config /config/trash.yml" >> /var/spool/cron/crontabs/root;
+ARG CONFIG_FILE="/config/trash.yml"
+RUN echo "$SCHEDULE /usr/local/bin/trash sonarr --config $CONFIG_FILE" > /var/spool/cron/crontabs/root; \
+    echo "$SCHEDULE /usr/local/bin/trash radarr --config $CONFIG_FILE" >> /var/spool/cron/crontabs/root; \
+    rm -rf /etc/periodic;
 
-# Start crontab daemon using tini
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/usr/sbin/crond", "-f"]
+# Define entrypoint (which starts the cron job daemon or the CLI)
+COPY ./entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]

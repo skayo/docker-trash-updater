@@ -7,7 +7,7 @@ WORKDIR /build
 
 # Build binary
 RUN set -ex; \
-	git clone -b v1.8.2 https://github.com/rcdailey/trash-updater.git ./; \
+	git clone -b "v1.8.2" https://github.com/rcdailey/trash-updater.git ./; \
 	apkArch="$(apk --print-arch)"; \
 	case "$apkArch" in \
 		armhf) runtime='alpine-arm' ;; \

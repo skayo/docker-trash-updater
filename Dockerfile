@@ -37,7 +37,7 @@ COPY --from=build /build/output/trash /usr/local/bin/trash
 # Remove the existing crontab file (will be created dynamically by entrypoint.sh)
 RUN set -ex; \
     rm -r /var/spool/cron/crontabs/root; \
-    rm -rf /etc/periodic;
+    rm -rf /etc/periodic
 
 # Define entrypoint (script that starts the cron job daemon or the CLI, depending on the arguments)
 COPY --chmod=0755 ./entrypoint.sh /

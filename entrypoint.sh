@@ -7,8 +7,12 @@ if [ "$#" -gt 0 ]; then
 	/usr/local/bin/trash "$@"
 else
 	echo "Creating crontab file..."
-	echo "${CRON_SCHEDULE:-@daily} /usr/local/bin/trash sonarr --config ${CONFIG_FILE:-/config/trash.yml}" > /var/spool/cron/crontabs/root
-	echo "${CRON_SCHEDULE:-@daily} /usr/local/bin/trash radarr --config ${CONFIG_FILE:-/config/trash.yml}" >> /var/spool/cron/crontabs/root
+	schedule=${CRON_SCHEDULE:-@daily}
+	sonarr_schedule=${CRON_SCHEDULE_SONARR:-$schedule}
+	radarr_schedule=${CRON_SCHEDULE_RADARR:-$schedule}
+	config_file=${CONFIG_FILE:-/config/trash.yml}
+	echo "$sonarr_schedule /usr/local/bin/trash sonarr --config $config_file" > /var/spool/cron/crontabs/root
+	echo "$radarr_schedule /usr/local/bin/trash radarr --config $config_file" >> /var/spool/cron/crontabs/root
 
 	echo "Starting cron daemon..."
 	exec crond -f

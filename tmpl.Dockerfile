@@ -22,7 +22,7 @@ RUN set -ex; \
 		--configuration Release;
 
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine
+FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-alpine@sha256:c90872d8ad31e056b942966f9f47cc071369f2b04c726b7910d45cb375e6150d
 
 # Copy built binary
 COPY --from=build /build/output/trash /usr/local/bin/trash

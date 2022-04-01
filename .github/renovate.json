@@ -7,5 +7,12 @@
 		":reviewer(skayo)",
 		":assignee(skayo)",
 		":label(dependencies)"
+	],
+	"packageRules": [
+		{
+			"matchDatasources": ["docker"],
+			"matchPackageNames": ["mcr.microsoft.com/dotnet/sdk", "mcr.microsoft.com/dotnet/runtime-deps"],
+			"allowedVersions": "<7"
+		}
 	]
 }

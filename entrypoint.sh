@@ -5,8 +5,12 @@ set -e
 # This allows for "docker run skayo/trash-updater create-config", "docker run skayo/trash-updater --help", etc.
 if [ "$#" -gt 0 ]
 then
-    trash "$@"
+    /usr/local/bin/trash "$@"
 else
+	echo "Creating crontab file..."
+	echo "${CRON_SCHEDULE:-@daily} /usr/local/bin/trash sonarr --config ${CONFIG_FILE:-/config/trash.yml}" > /var/spool/cron/crontabs/root
+    echo "${CRON_SCHEDULE:-@daily} /usr/local/bin/trash radarr --config ${CONFIG_FILE:-/config/trash.yml}" >> /var/spool/cron/crontabs/root
+
 	echo "Starting cron daemon..."
-    /usr/sbin/crond -f -c /var/spool/cron/crontabs
+    exec crond -f
 fi

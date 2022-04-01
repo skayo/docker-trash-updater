@@ -29,14 +29,9 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true
 # Copy built binary from build step
 COPY --from=build /build/output/trash /usr/local/bin/trash
 
-# Define volume (contains config file)
-VOLUME /config
-
-# Setup cron jobs (we'll overwrite the existing crontab file)
-ARG SCHEDULE="@daily"
-ARG CONFIG_FILE="/config/trash.yml"
-RUN echo "$SCHEDULE /usr/local/bin/trash sonarr --config $CONFIG_FILE" > /var/spool/cron/crontabs/root; \
-    echo "$SCHEDULE /usr/local/bin/trash radarr --config $CONFIG_FILE" >> /var/spool/cron/crontabs/root; \
+# Remove the existing crontab file (will be created dynamically by entrypoint.sh)
+RUN set -ex; \
+    rm -r /var/spool/cron/crontabs/root; \
     rm -rf /etc/periodic;
 
 # Define entrypoint (which starts the cron job daemon or the CLI)

@@ -45,7 +45,7 @@ jobs:
           labels: |
             org.opencontainers.image.title=trash-updater
             org.opencontainers.image.description=Automatically sync TRaSH guides to your Sonarr and Radarr instances
-            org.opencontainers.image.vendor=Skayo
+            org.opencontainers.image.authors=Skayo (https://skayo.dev)
 
       - name: Build & Push Image 🏗
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a # tag=v2.10.0

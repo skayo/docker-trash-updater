@@ -34,6 +34,6 @@ RUN set -ex; \
     rm -r /var/spool/cron/crontabs/root; \
     rm -rf /etc/periodic;
 
-# Define entrypoint (which starts the cron job daemon or the CLI)
-COPY ./entrypoint.sh /
+# Define entrypoint (script that starts the cron job daemon or the CLI, depending on the arguments)
+COPY --chmod=0755 ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]

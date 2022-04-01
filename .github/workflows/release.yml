@@ -6,16 +6,28 @@ on:
     tags:
       - '**'
 
+env:
+  IMAGE_NAME: ${{ github.repository_owner }}/trash-updater
+
 jobs:
   release:
     name: Release Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
 
     steps:
       - name: Checkout ⤵
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3.0.0
         with:
           token: ${{ secrets.SKAYOBOT_GITHUB_TOKEN }}
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v2.1.0
+        with:
+          cosign-release: 'v1.4.0'
 
       - name: Set up QEMU 🛠
         uses: docker/setup-qemu-action@27d0a4f181a40b142cce983c5393082c365d1480 # tag=v1.2.0
@@ -40,7 +52,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@e5622373a38e60fb6d795a4421e56882f2d7a681 # tag=v3.6.2
         with:
-          images: ${{ github.repository_owner }}/trash-updater,ghcr.io/${{ github.repository_owner }}/trash-updater
+          images: ${{ env.IMAGE_NAME }},ghcr.io/${{ env.IMAGE_NAME }}
           tags: type=ref,event=tag
           labels: |
             org.opencontainers.image.title=trash-updater
@@ -48,11 +60,19 @@ jobs:
             org.opencontainers.image.authors=Skayo (https://skayo.dev)
 
       - name: Build & Push Image 🏗
+        id: build-and-push
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a # tag=v2.10.0
         with:
+          push: true
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
-          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Sign the published Docker Image 📝
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          cosign sign ${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
+          cosign sign ghcr.io/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}

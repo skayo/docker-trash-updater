@@ -1,7 +1,3 @@
-#
-# Auto-generated from tmpl.Dockerfile
-#
-
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:6.0-alpine@sha256:4882761845f96b050a4d77e1b3d01f11269c8b1499f75889b63eafa2dbb54064 AS build
 WORKDIR /build
 

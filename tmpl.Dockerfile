@@ -10,7 +10,7 @@ RUN set -ex; \
 	git clone -b "${VERSION}" https://github.com/rcdailey/trash-updater.git ./; \
 	apkArch="$(apk --print-arch)"; \
 	case "$apkArch" in \
-		armhf) runtime='alpine-arm' ;; \
+		armv7) runtime='alpine-arm' ;; \
 		aarch64) runtime='alpine-arm64' ;; \
 		x86_64) runtime='alpine-x64' ;; \
 		*) echo >&2 "error: unsupported architecture: $apkArch"; exit 1 ;; \

@@ -1,6 +1,7 @@
 name: Release Workflow
 
 on:
+  # Trigger for any pushed tags
   push:
     tags:
       - '**'

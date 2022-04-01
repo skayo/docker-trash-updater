@@ -11,7 +11,7 @@ RUN case "$TARGETPLATFORM" in \
 		"linux/arm/v7") runtime='alpine-arm' ;; \
 		"linux/arm64") runtime='alpine-arm64' ;; \
 		"linux/amd64") runtime='alpine-x64' ;; \
-		*) echo >&2 "error: unsupported architecture: $apkArch"; exit 1 ;; \
+		*) echo >&2 "ERROR: Unsupported target platform: $TARGETPLATFORM"; exit 1 ;; \
 	esac; \
 	dotnet publish src/Trash \
 		--output ./output  \

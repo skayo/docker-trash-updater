@@ -1,9 +1,3 @@
-# Steps:
-# 1. Check for new release
-# 2. Update Dockerfile with new version
-# 3. Create git tag for version
-# 4. Push changes to tag and main branch
-
 name: Update Workflow
 
 on:
@@ -12,7 +6,7 @@ on:
     - cron: '0 * * * *'
 
   # Also allow manual dispatch
-  workflow_dispatch: null
+  workflow_dispatch:
 
 jobs:
   update-on-new-release:

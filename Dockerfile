@@ -25,7 +25,7 @@ RUN case "$TARGETPLATFORM" in \
 		--configuration Release
 
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine@sha256:91db5cb22c9114ae9b7f96413931b38eed665e5c5963a7670c1323c64a201ce9
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine@sha256:a1734e94c8738255e56cdb8ce0b4755bc0c715150469442c0a0b7a62429ff62d
 
 # Runtime configuration options
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1

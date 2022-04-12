@@ -1,9 +1,9 @@
 # ARCHIVED - trash-updater by rcdailey now has an official Docker image
 
-# docker-trash-updater
+## docker-trash-updater
 Unofficial Docker Image for trash-updater 🐳🗑🔄
 
-## Usage
+### Usage
 
 Pull image from GitHub Container Registry:
 ```sh-session
